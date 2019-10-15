@@ -73,7 +73,6 @@ class Board
     end
 
     def reveal(x, y, initial = true)
-        
         if initial == true
             return @lost = true if @board[x][y].bombed?
             return puts "Tile flagged, Please unflag before reveal." if @board[x][y].flagged?
@@ -89,6 +88,11 @@ class Board
         elsif !@board[x][y].bombed?
             @board[x][y].reveal
         end
+    end
+
+    def flag(x, y)
+        @board[x][y].flagged? ? (puts "Unflaged.") : (puts "flagged.")
+        @board[x][y].flag
     end
 
     def render

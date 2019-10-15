@@ -23,7 +23,7 @@ class Tile
     end
 
     def flag
-        flagged? ? false : true
+        flagged? ? @flagged = false : @flagged = true
     end
 
     def flagged?
@@ -31,7 +31,7 @@ class Tile
     end
 
     def to_s
-        flagged? ? "F" : revealed? ? (@neighbor_bomb_count == 0 ? "_" : @neighbor_bomb_count.to_s) : "*"
+        revealed? ? (@neighbor_bomb_count == 0 ? "_" : @neighbor_bomb_count.to_s) : (flagged? ? "F" : "*")
     end
 
 end
