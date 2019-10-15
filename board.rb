@@ -1,3 +1,5 @@
+require "byebug"
+
 require_relative "tile"
 
 class Board
@@ -5,7 +7,7 @@ class Board
     attr_reader :board
     def self.creat_board(size)
         map = Array.new(size) {Array.new(size)}
-        mine_map = [0,0,0,0,0,0,0,0,0] #need to set shuffle to finalize, current testing
+        mine_map = [1,0,0,0,0,0,0,0,0] #need to set shuffle to finalize, current testing
         mine_map.each.with_index do |value, idx|
             map[idx/size][idx%size] = Tile.new(value == 1, Board.neighbor_bomb_count(mine_map, size, idx))
         end
@@ -62,6 +64,7 @@ class Board
     def initialize(size = 3)
         @size = size
         @board = Board.creat_board(size)
+        @lost = false
     end
 
     def [](pos)
@@ -69,20 +72,35 @@ class Board
         @board[x][y]
     end
 
-    def reveal(x,y, initial = true)
+    def reveal(x, y, initial = true)
+        
         if initial == true
-            return puts "Game Over" if @board[x][y].bombed?
+            return @lost = true if @board[x][y].bombed?
             return puts "Tile flagged, Please unflag before reveal." if @board[x][y].flagged?
             return puts "Tile revealed already." if @board[x][y].revealed?
+        end
+        bomb_count = @board[x][y].neighbor_bomb_count
+        if @board[x][y].neighbor_bomb_count == 0 && !@board[x][y].bombed? && !@board[x][y].revealed?
+            @board[x][y].reveal
+            reveal(x-1, y, false) if x != 0
+            reveal(x, y+1, false) if y != @size - 1
+            reveal(x+1, y, false) if x != @size - 1
+            reveal(x, y-1, false) if y != 0
+        elsif !@board[x][y].bombed?
             @board[x][y].reveal
         end
-        if @board[x][y].neighbor_bomb_count == 0 && !@board[x][y].bombed?
-            @board[x,y].reveal
-            reveal(@board[x-1,y], false) if x != 0
-            reveal(@board[x,y+1], false) if y != @size
-            reveal(@board[x+1,y], false) if x != @size
-            reveal(@board[x,y-1], false) if y != 0
+    end
+
+    def render
+        puts "  #{(0...@size).to_a.join(" ")}"
+        @board.each.with_index do |row,idx|
+            puts "#{idx} #{row.join(" ")}"
         end
+    end
+
+    def won?
+        return "You hit the bomb!" if @lost
+        return "You won!" if @board.flatten.select {|tile| tile.revealed?}.count == 8
     end
 
 end

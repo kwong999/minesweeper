@@ -14,7 +14,7 @@ class Tile
     end
 
     def reveal
-        flagged? ? return false : @revealed = true
+        flagged? ? (return false) : @revealed = true
         true
     end
 
@@ -31,7 +31,7 @@ class Tile
     end
 
     def to_s
-        flagged? ? "F" : revealed? ? (@neighbor_bomb_count == 0 ? "_" : neighbor_bomb_count) : "*"
+        flagged? ? "F" : revealed? ? (@neighbor_bomb_count == 0 ? "_" : @neighbor_bomb_count.to_s) : "*"
     end
 
 end
