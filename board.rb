@@ -7,7 +7,8 @@ class Board
     attr_reader :board
     def self.creat_board(size)
         map = Array.new(size) {Array.new(size)}
-        mine_map = [1,0,0,0,0,0,0,0,0] #need to set shuffle to finalize, current testing
+        
+        mine_map = (Array.new(size**2 - 10, 0) + Array.new(10, 1)).shuffle #need to set shuffle to finalize, current testing
         mine_map.each.with_index do |value, idx|
             map[idx/size][idx%size] = Tile.new(value == 1, Board.neighbor_bomb_count(mine_map, size, idx))
         end
@@ -61,7 +62,7 @@ class Board
         mine_map[idx + size - 1]
     end
 
-    def initialize(size = 3)
+    def initialize(size = 9)
         @size = size
         @board = Board.creat_board(size)
         @lose = false
@@ -103,7 +104,7 @@ class Board
     end
 
     def won?
-        if @board.flatten.select {|tile| tile.revealed?}.count == 8
+        if @board.flatten.select {|tile| tile.revealed?}.count == (@size**2 - 10)
             puts "You won!" 
             return true
         end

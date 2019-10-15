@@ -3,7 +3,7 @@ require_relative "player"
 
 class Minesweeper
 
-    def initialize(size = 3)
+    def initialize(size = 9)
         @size = size
         @board = Board.new(size)
         @player = Player.new
@@ -35,4 +35,9 @@ class Minesweeper
         end
     end
 
+end
+
+if $PROGRAM_NAME == __FILE__
+    Game = Minesweeper.new
+    Game.run
 end
