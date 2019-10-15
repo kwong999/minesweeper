@@ -64,7 +64,7 @@ class Board
     def initialize(size = 3)
         @size = size
         @board = Board.creat_board(size)
-        @lost = false
+        @lose = false
     end
 
     def [](pos)
@@ -74,7 +74,7 @@ class Board
 
     def reveal(x, y, initial = true)
         if initial == true
-            return @lost = true if @board[x][y].bombed?
+            return @lose = true if @board[x][y].bombed?
             return puts "Tile flagged, Please unflag before reveal." if @board[x][y].flagged?
             return puts "Tile revealed already." if @board[x][y].revealed?
         end
@@ -103,8 +103,18 @@ class Board
     end
 
     def won?
-        return "You hit the bomb!" if @lost
-        return "You won!" if @board.flatten.select {|tile| tile.revealed?}.count == 8
+        if @board.flatten.select {|tile| tile.revealed?}.count == 8
+            puts "You won!" 
+            return true
+        end
+        false
     end
 
+    def lose?
+        if @lose
+            puts "You hit the bomb!"
+            return true
+        end
+        false
+    end
 end

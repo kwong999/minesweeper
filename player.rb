@@ -4,7 +4,7 @@ class Player
 
     def get_pos
         prompt
-        parse_pos(get.chomp)
+        parse_pos(gets.chomp)
     end
 
     def prompt
