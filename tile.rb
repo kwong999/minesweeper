@@ -1,6 +1,6 @@
 class Tile
 
-    attr_reader
+    attr_reader :neighbor_bomb_count
 
     def initialize(bombed = false, neighbor_bomb_count)
         @bombed = bombed
