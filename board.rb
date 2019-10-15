@@ -77,6 +77,7 @@ class Board
             @board[x][y].reveal
         end
         if @board[x][y].neighbor_bomb_count == 0 && !@board[x][y].bombed?
+            @board[x,y].reveal
             reveal(@board[x-1,y], false) if x != 0
             reveal(@board[x,y+1], false) if y != @size
             reveal(@board[x+1,y], false) if x != @size
